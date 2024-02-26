@@ -18,6 +18,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import SuperAdmin from "components/SuperAdmin";
+import PChat from "components/PChat";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -44,6 +45,7 @@ function App() {
             <Route exact path="/" element={<Loginstudent />} />
             <Route exact path="/register" element={<Registerstudent />} />
             <Route exact path="/user-home" element={<Userhome />} />
+            <Route exact path="/chat/:receiverId" element={<PChat/>} />
             <Route
               exact
               path="/viewAnnoucements/:club"

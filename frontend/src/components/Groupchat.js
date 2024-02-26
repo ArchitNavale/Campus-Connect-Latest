@@ -22,7 +22,6 @@ const Groupchat = ({ club }) => {
     fetch(`http://localhost:7000/all-group-messages?club=${club}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log('datayaaaaaaaaaa is', data);
         setMessages(data);
       })
       .catch((error) => {
