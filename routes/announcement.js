@@ -82,7 +82,6 @@ router.post('/api/blog/like/:announcementId', async (req, res) => {
 
 router.delete('/api/blog/delete/:announcementId', async (req, res) => {
   const { announcementId } = req.params;
-  console.log(announcementId)
 
   try {
     const result = await Announcement.deleteOne({ _id: announcementId });

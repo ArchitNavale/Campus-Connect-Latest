@@ -48,7 +48,6 @@ const PChat = () => {
                 message: message,
             };
             socket.emit("msgsolo", messageData);
-            console.log('msgdata', messageData)
             if (messageData.sender && messageData.receiver) {
                 fetch('/setchats', {
                     method: 'post',

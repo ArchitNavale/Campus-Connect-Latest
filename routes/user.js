@@ -117,14 +117,12 @@ router.post("/add-club", async (req, res) => {
 router.get("/userinfo", async (req, res) => {
   try {
     const user_id = req.body;
-    console.log(user_id);
     //const userInfo = await User.findOne({_id : user_id})
     const users = await User.find({ _id: { $ne: req.params.id } }).select([
       "email",
       "name",
       "_id",
     ]);
-    console.log(users);
     res.json(users);
   } catch (e) {
     console.log("error occured", e);

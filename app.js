@@ -73,7 +73,6 @@ app.get("/all-group-messages", async (req, res) => {
 });
 
 app.post('/setchats', async (req, res) => {
-  console.log('archit sir', req.body)
   const newMsg = await new PMsg({
     ...req.body,
   });
@@ -107,7 +106,6 @@ app.post("/posts", createPost);
 
 app.post('/register', async (req, res) => {
   try {
-    console.log('data is', req.body);
     const newUser = await new User({
       ...req.body,
     });
@@ -120,7 +118,6 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/searching/:enterName', (req, res) => {
-  console.log(req.params)
   // if(!req.params.enterName) {
   //     return res.status(422).json();
   // }
@@ -141,9 +138,7 @@ app.get('/searching/:enterName', (req, res) => {
 })
 const Club = mongoose.model("Club");
 app.get("/get-clubs", async (req, res) => {
-  console.log('hellowolrd')
   const x = await Club.find({});
-  console.log(x)
   return res.json(x);
 });
 app.use("/auth", authRoutes);
@@ -205,7 +200,6 @@ const io = socket(server, {
 io.on("connection", (socket) => {
   socket.on("message", ({ message, senderId, senderName, club }) => {
     // console.log('messaging', {message, senderId, senderName})
-    console.log('msg me'.club)
     const newMsg = new Chat({
       message,
       senderId,
