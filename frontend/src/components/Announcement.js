@@ -70,7 +70,7 @@ const Announcement = () => {
   };
   return (
     <>
-    <div className='mainpage p-10 w-5/6 h-auto bg-white mt-10'>
+    <div className='mainpage p-10 w-full ml-20   h-auto bg-white mt-10'>
       <h1 className='text-2xl text-gray-600 font-semibold p-3 '>Blog Announcement</h1>
       <div className='m-4'>
         <ReactQuill 

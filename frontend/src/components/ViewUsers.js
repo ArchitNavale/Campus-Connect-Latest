@@ -12,8 +12,8 @@ const ViewUsers = () => {
         fetchUsers();
     }, [])
     return (
-        <div>
-            <h1>hello</h1>
+        <div className="text-black">
+            <h1>Users</h1>
             {users?.map((user, i) => {
                 return (
                     <div key={i}>
