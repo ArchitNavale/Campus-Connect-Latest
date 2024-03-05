@@ -71,7 +71,7 @@ const Navbar = () => {
   }, [val])
   // console.log('hmya', renderList);
   return (
-    <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+    <FlexBetween padding="1rem 6%" backgroundColor={alt} position="relative">
       <FlexBetween gap="1.75rem">
         <Typography
           fontWeight="bold"
@@ -91,8 +91,10 @@ const Navbar = () => {
           <FlexBetween
             backgroundColor={neutralLight}
             borderRadius="9px"
-            gap="3rem"
+            // gap="10rem"
+            width={250}
             padding="0.1rem 1.5rem"
+            position="relative"
           >
             <InputBase  placeholder="Search..." onChange={(e) => {
               setVal(e.target.value);
@@ -113,14 +115,14 @@ const Navbar = () => {
             </IconButton> */}
             {isSearchDropdownVisible && renderList.length > 0 &&(
             <IconButton
-              className="flex-col text-left absolute top-32 right-60 shadow-lg z-999999 bg-white h-10"
-              style={{ zIndex: 999999 }}
+              className="flex-col z-999999990 "
+              style={{  position: "absolute", zIndex: 999999, left: 0, top: "100%", borderRadius: "0.25rem" }}
             >
               <div className="flex-col ">
                 {renderList?.map((ele, i) => (
-                  <p className="bg-white " key={i}>
+                  <p className="bg-white border border-gray-300 " key={i}>
                     <Link to={`/profile/${ele._id}`} className="bg-gray-400">
-                      <p className="bg-white w-70 p-4">{ele.name}</p>
+                      <p className="bg-white w-77 p-4">{ele.name}</p>
                     </Link>
                   </p>
                 ))}
@@ -228,13 +230,13 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton> */}
-              <Message sx={{
+              {/* <Message sx={{
                 fontSize: "25px",
                 "&:hover": {
                   color: primaryLight,
                   cursor: "pointer",
                 },
-              }} onClick={() => navigate("/chat")} />
+              }} onClick={() => navigate("/chat")} /> */}
 
               <FormControl variant="standard" value={fullName}>
                 <Select

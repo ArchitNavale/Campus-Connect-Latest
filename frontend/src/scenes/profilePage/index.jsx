@@ -8,6 +8,7 @@ import MyPostWidget from "../../scenes/widgets/MyPostWidget";
 import PostsWidget from "../../scenes/widgets/PostsWidget";
 import UserWidget from "../../scenes/widgets/UserWidget";
 import { Link } from 'react-router-dom'
+import PersonalChatWidget from "scenes/widgets/PersonalChatWidget";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -45,16 +46,8 @@ const ProfilePage = () => {
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
           <UserWidget userId={userId} picturePath={user.picture} />
           <Box m="2rem 0" />
-          <FriendListWidget userId={userId} />
-        </Box>
-        <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
-        >
-          <MyPostWidget picturePath={user?.picture} />
-          <Box m="2rem 0" />
-          <PostsWidget userId={userId} isProfile />
-          {(userId !== actualUser?._id) && (
+          <PersonalChatWidget userId={userId} />
+          {/* {(userId !== actualUser?._id) && (
             <Link to={`/chat/${userId}`}><button  style={{
               padding: '8px 15px',
               fontSize: '16px',
@@ -64,7 +57,18 @@ const ProfilePage = () => {
               borderRadius: '5px',
               cursor: 'pointer',
             }}>Chat !</button></Link>
-          )}
+          )} */}
+          <Box m="2rem 0" />
+          <FriendListWidget userId={userId} />
+        </Box>
+        <Box
+          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          mt={isNonMobileScreens ? undefined : "2rem"}
+        >
+          <MyPostWidget picturePath={user?.picture} />
+          <Box m="2rem 0" />
+          <PostsWidget userId={userId} isProfile />
+          
         </Box>
       </Box>
     </Box>

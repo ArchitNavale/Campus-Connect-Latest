@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import UserWidget from "../widgets/UserWidget";
 import MyPostWidget from "../widgets/MyPostWidget";
 import PostsWidget from "../widgets/PostsWidget";
-import AdvertWidget from "../widgets/AdvertWidget";
+import AdvertWidget from "../widgets/PersonalChatWidget";
 import FriendListWidget from "../widgets/FriendListWidget";
 import { setLogin } from "state";
 import { useEffect } from "react";
@@ -64,7 +64,7 @@ const HomePage = () => {
         </Box>
         {isNonMobileScreens && (
           <Box flexBasis="26%">
-            <AdvertWidget />
+            {/* <AdvertWidget /> */}
             <Box m="2rem 0" />
             <FriendListWidget userId={_id} />
           </Box>

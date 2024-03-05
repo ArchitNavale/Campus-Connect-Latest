@@ -2,7 +2,7 @@ import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import Navbar from "../../scenes/navbar";
 import UserWidget from "../../scenes/widgets/UserWidget";
-import AdvertWidget from "../../scenes/widgets/AdvertWidget";
+import AdvertWidget from "../widgets/PersonalChatWidget";
 import FriendListWidget from "../../scenes/widgets/FriendListWidget";
 import ChatWidget from "../../scenes/widgets/ChatWidget";
 

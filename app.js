@@ -9,37 +9,21 @@ require('./modals/announcement.js');
 require('./modals/admin.js');
 require('./modals/chat.js');
 require('./modals/Club.js');
-// import { Server } from "socket.io";
-// import bodyParser from "body-parser";
 const bodyParser = require('body-parser')
-// import multer from "multer";
 const dotenv = require('dotenv')
-// import helmet from "helmet";
 const helmet = require('helmet')
 const morgan = require('morgan')
-// import morgan from "morgan";
-// import path from "path";
 const path = require('path')
-// import { fileURLToPath } from "url";
 const fileURLToPath = require('url')
-// import authRoutes from "./routes/auth";
 const authRoutes = require("./routes/auth")
-// import userRoutes from "./routes/users.js";
 const userRoutes = require("./routes/user.js")
 const postRoutes = require("./routes/posts")
-// import postRoutes from "./routes/posts.js";
-// import { register } from "./controllers/auth";
 const { register } = require("./controllers/auth")
-// import { createPost } from "./controllers/posts.js";
 const { createPost } = require("./controllers/posts.js")
-// import { verifyToken } from "./middleware/auth.js";
 const verifyToken = require("./middleware/auth.js")
-// import User from "./modals/user.js";
 const User = require("./modals/user")
 const Post = require("./modals/Post.js")
 const PMsg = require("./modals/pmsg.js")
-// import Post from "./modals/Post.js";
-// import { users, posts } from "./data/index.js";
 const { users, posts } = require("./data/index.js")
 const cloudinary = require('cloudinary').v2;
 
