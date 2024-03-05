@@ -55,7 +55,15 @@ const ProfilePage = () => {
           <Box m="2rem 0" />
           <PostsWidget userId={userId} isProfile />
           {(userId !== actualUser?._id) && (
-            <Link to={`/chat/${userId}`}><button>Chat !</button></Link>
+            <Link to={`/chat/${userId}`}><button  style={{
+              padding: '8px 15px',
+              fontSize: '16px',
+              backgroundColor: '#3498db',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+            }}>Chat !</button></Link>
           )}
         </Box>
       </Box>

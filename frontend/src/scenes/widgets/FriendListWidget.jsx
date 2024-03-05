@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFriends } from "state";
 
 const FriendListWidget = ({ userId }) => {
-  console.log(userId)
+  console.log("fromfreindlistid",userId)
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
   
-  const friends = useSelector((state) => (state.user || {})?.friends || []);
-  // console.log(friends)
+  const friends = useSelector((state) => (state.user).friends);
+  console.log(friends)
 
 
   const getFriends = async () => {
@@ -48,7 +48,8 @@ const FriendListWidget = ({ userId }) => {
         Friend List
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends?.map((friend) => (
+      {Array.isArray(friends) &&
+        friends?.map((friend) => (
           // console.log("Friend Picture:", friend.picture);
           <Friend
             key={friend._id}

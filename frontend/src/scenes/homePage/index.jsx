@@ -36,14 +36,12 @@ const HomePage = () => {
   }
   useEffect(() => {
     mylogin();
-    // window.location.reload()
   }, []);
   // console.log('uservv',userval)
   const user = useSelector((state) => state.user);
   const userId = user?._id; 
   const { _id, picturePath } = user || {};
-  console.log("from home",user)
-  // window.location.reload()
+  console.log("from home",userId)
   return (
     <Box>
       <Navbar />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams } from 'react-router-dom'
 import io from "socket.io-client";
+import UserImage from "./UserImage";
 import { useSelector } from "react-redux";
 
 // const BASE_URL = "http://localhost:5000";
@@ -13,17 +14,46 @@ const PChat = () => {
     const socket = useMemo(() => io("localhost:7000"), []);
     const { receiverId } = useParams();
     const senderId = user?._id;
-    // console.log('architr testing', senderId, receiverId)
+    console.log("senderidhere",senderId)
+    const [receiverPicture, setReceiverPicture] = useState(null);
+    const senderpic = user?.picture;
     const [message, setMessage] = useState("");
+    console.log("receiveridhere",receiverId)
+
+     // Function to fetch receiver's picture
+   const fetchReceiverPicture = async (receiverId) => {
+    try {
+        console.log("receiveridhere2",receiverId)
+      const response = await fetch(`/api/getReceiverPicture?receiverId=${receiverId}`);
+      const data = await response.json();
+      setReceiverPicture(data.picture);
+      console.log("receiverpicture",data.picture) // assuming the response structure has a 'picture' field
+    } catch (error) {
+      console.error("Error fetching receiver picture:", error);
+      // Handle error or set a default receiver picture path
+    //   setReceiverPicture("default-receiver-image.jpg");
+    }
+  };
 
     const handleMessages = useCallback(
         (messageData) => {
-            const { sender, receiver } = messageData;
+            const { sender, receiver, message } = messageData;
             if (sender === receiverId && receiver === senderId) {
                 fetch(`/getmsgs?sender=${sender}&receiver=${receiver}`)
                     .then(res => res.json())
-                    .then((result) => setChats(result))
-            }
+                    .then((result) => {
+                        setChats(result);
+                        if (result.length > 0) {
+                            // Update receiverPicture based on the latest message
+                            fetchReceiverPicture(receiverId);
+                        }else {
+                            // Handle the case when there are no messages
+                            setReceiverPicture(null); // or set a default picture
+                        }
+                    }
+
+                    )
+                }
         },
         [receiverId, senderId]
     );
@@ -38,12 +68,21 @@ const PChat = () => {
     useEffect(() => {
         fetch(`/getmsgs?sender=${senderId}&receiver=${receiverId}`)
             .then(res => res.json())
-            .then((result) => setChats(result))
-    }, []);
+            .then((result) => {
+                setChats(result);
+                if (result.length > 0) {
+                    fetchReceiverPicture(receiverId);
+                }
+            }
+            
+            )
+    }, [receiverId, senderId]);
     const sendMessage = () => {
         if (message) {
             const messageData = {
                 sender: senderId,
+                senderpicture: senderpic,
+                receiverpicture:receiverPicture,
                 receiver: receiverId,
                 message: message,
             };
@@ -77,6 +116,14 @@ const PChat = () => {
                             ) {
                                 const formattedDate = new Date(chat.createdAt).toLocaleDateString();
                                 const formattedTime = new Date(chat.createdAt).toLocaleTimeString();
+                                
+                                // Determine the user (sender or receiver) of the current message
+                                const isSender = chat.sender === senderId;
+                                const messageUser = isSender ? chat.sender : chat.receiver;
+
+                                // Determine the picture based on the user of the current message
+                                const messageUserPicture = isSender ? senderpic : receiverPicture;
+                                
                                 return (
                                     <div
                                         key={i}
@@ -89,15 +136,20 @@ const PChat = () => {
                                                 : "justify-start"
                                                 }`}
                                         >
-                                            {chat.sender !== senderId && (
-                                                <img
-                                                    src={"https://unsplash.com/s/photos/human"}
-                                                    alt={""}
-                                                    className="w-8 h-8 rounded-full mr-2"
-                                                />
+                                             {!isSender && (
+                                                // <img
+                                                //     src={messageUserPicture}
+                                                //     alt={"receiver"}
+                                                //     className="w-12 h-15 rounded-full mr-2"
+                                                // />
+                                                <UserImage
+                                                 image={messageUserPicture}
+                                                 size="50px"
+                                                 isPost={false} // Set to false since it's not a post image
+                                                 />
                                             )}
                                             <div
-                                                className={`flex items-center justify-center p-3 rounded-lg text-white ${chat.sender === senderId
+                                                className={`flex items-center justify-center p-3 rounded-lg text-white ${isSender
                                                     ? "bg-teal-500"
                                                     : "bg-blue-500"
                                                     }`}
@@ -106,12 +158,17 @@ const PChat = () => {
                                                 <span>{chat.message}</span>
                                                 <div className="text-xs ml-2 text-gray-500">{formattedTime}, {formattedDate}</div>
                                             </div>
-                                            {chat.sender === senderId && (
-                                                <img
-                                                    src={"https://unsplash.com/s/photos/human"}
-                                                    alt={""}
-                                                    className="w-8 h-8 rounded-full ml-2"
-                                                />
+                                            {isSender && (
+                                                // <img
+                                                //     src={messageUserPicture}
+                                                //     alt={"sender"}
+                                                //     className="w-12 h-15 rounded-full ml-2"
+                                                // />
+                                                <UserImage
+                                                 image={messageUserPicture}
+                                                 size="50px"
+                                                 isPost={false} // Set to false since it's not a post image
+                                                 />
                                             )}
                                         </div>
                                     </div>

@@ -145,7 +145,7 @@ const PersonalChat = () => {
           <div className="row h-[35rem]">
             <div className="col-md-4 border d-flex flex-column">
               <div className="flex p-2">
-                <img className="w-10" src="./profile.png" alt="" />
+                <img className="w-10" src="./profile.png" alt="user pic" />
               <h2 className="text-xl ml-3 pt-1 text-left ">{username}</h2>
               </div>
               <div className="d-flex flex-column text-left">

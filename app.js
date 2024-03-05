@@ -72,6 +72,24 @@ app.get("/all-group-messages", async (req, res) => {
   }
 });
 
+app.get('/api/getReceiverPicture', async (req, res) => {
+  try {
+    const { receiverId } = req.query;
+
+    // Assume you have a MongoDB model named User with a 'picture' field
+    const receiver = await User.findById(receiverId);
+    
+    if (!receiver || !receiver.picture) {
+      return res.status(404).json({ error: 'Receiver picture not found' });
+    }
+
+    res.json({ picture: receiver.picture });
+  } catch (error) {
+    console.error('Error fetching receiver picture:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.post('/setchats', async (req, res) => {
   const newMsg = await new PMsg({
     ...req.body,
