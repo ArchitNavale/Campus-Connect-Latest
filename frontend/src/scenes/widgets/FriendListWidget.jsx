@@ -11,7 +11,8 @@ const FriendListWidget = ({ userId }) => {
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
   
-  const friends = useSelector((state) => (state.user).friends);
+  const friends = useSelector((state) => (state.user ? state.user.friends : []));
+  const isLoading = useSelector((state) => state.isLoading);
   console.log(friends)
 
 
@@ -39,6 +40,10 @@ const FriendListWidget = ({ userId }) => {
   console.log("friends",friends)
   return (
     <WidgetWrapper>
+      {isLoading ? (
+      <p>Loading friends...</p>
+    )  : (
+      <>
       <Typography
         color={palette.neutral.dark}
         variant="h5"
@@ -60,6 +65,8 @@ const FriendListWidget = ({ userId }) => {
           />
         ))}
       </Box>
+      </>
+      )}
     </WidgetWrapper>
   );
 };

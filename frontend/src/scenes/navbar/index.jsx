@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
+import ProfilePage from "scenes/profilePage";
 
 const Navbar = () => {
   const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
@@ -34,6 +35,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  console.log("user from navbar",user)
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -41,7 +43,8 @@ const Navbar = () => {
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
-
+  const userid = `${user._id}`
+  console.log("userid from nav",userid)
   const fullName = user ? `${user.name}` : '';
   useEffect(() => {
     if (val.trim() === "") {
@@ -177,6 +180,7 @@ const Navbar = () => {
                   <Typography>{fullName}</Typography>
                 </MenuItem>
                 {/* <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem> */}
+                <MenuItem onClick={() => navigate(`/profile/${userid}`)}>View Profile</MenuItem>
                 <MenuItem onClick={() => { navigate('/user-home') }}>Log Out</MenuItem>
               </Select>
             </FormControl>

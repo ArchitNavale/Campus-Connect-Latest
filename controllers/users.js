@@ -89,6 +89,7 @@ const updateUser = async (req, res) => {
       email,
       password,
       picturePath,
+      picture,
       location,
       occupation,
     } = req.body;

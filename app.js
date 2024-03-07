@@ -22,6 +22,7 @@ const { register } = require("./controllers/auth")
 const { createPost } = require("./controllers/posts.js")
 const verifyToken = require("./middleware/auth.js")
 const User = require("./modals/user")
+const Admin = require("./modals/admin.js")
 const Post = require("./modals/Post.js")
 const PMsg = require("./modals/pmsg.js")
 const { users, posts } = require("./data/index.js")
@@ -53,6 +54,62 @@ app.get("/all-group-messages", async (req, res) => {
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ error: "Failed to fetch messages" });
+  }
+});
+
+app.patch('/update-image-admin/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await Admin.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Admin not found' });
+    }
+
+    user.picture = req.body.picture;
+    user.picturePath = req.body.picturePath;
+
+    await user.save();
+
+    res.json({ message: 'Profile image updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile image for admin:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+app.patch('/update-image/:userId', async (req, res) => {
+  const { userId } = req.params;
+  console.log("body",req.body);
+  try {
+    // Retrieve the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the user already has a profile image on Cloudinary
+    // if (user.picture) {
+    //   // Delete the existing image on Cloudinary (optional)
+    //   await cloudinary.uploader.destroy(user.picture);
+    // }
+
+    // Upload the new image to Cloudinary
+    // const result = await cloudinary.uploader.upload(req.body.image);
+
+    // Update the user's profile image public ID in the database
+    user.picture = req.body.picture;
+    user.picturePath=req.body.picturePath
+    console.log("userpicture",user.picture)
+    // // Save the updated user object
+    await user.save();
+
+    res.json({ message: 'Profile image updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile image:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

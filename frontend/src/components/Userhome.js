@@ -6,6 +6,7 @@ import ViewAnnoucements from "./ViewAnnoucements";
 // import { member } from '../common/clubmember';
 import EditIcon from "@mui/icons-material/Edit";
 import ViewUsers from "./ViewUsers";
+import { Image, Transformation } from 'cloudinary-react';
 // import user from "../../../modals/user"
 // import Navbar from './Navbar';
 
@@ -19,8 +20,13 @@ const Userhome = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedEmail, setUpdatedEmail] = useState("");
   const [updatedYear, setUpdatedYear] = useState("");
+  const [isUpdatingImage, setIsUpdatingImage] = useState(false);
+  const [updatedImage, setUpdatedImage] = useState(null);
+  const [updatedImageName, setUpdatedImageName] = useState('');
   // console.log(user)
   // console.log('User Picture URL:', user.user.picture);
+
+  const cloudinaryCloudName = 'campusconnect-rajdeep';
 
   const handleUpdateEmail = async () => {
     try {
@@ -89,12 +95,196 @@ const Userhome = () => {
       console.error("Error updating year:", error);
     }
   };
+   
+  const handleCloudinaryUpload = () => {
+    if (!updatedImage) {
+        return Promise.resolve(null);
+    }
+
+    const formData = new FormData();
+    formData.append('file', updatedImage);
+    formData.append('upload_preset', 'userimage'); // Replace with your Cloudinary upload preset
+
+    return fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => data.secure_url)
+        .catch(error => {
+            console.error('Error uploading image to Cloudinary:', error);
+            return null;
+        });
+};
+
+const handleUpdateImage = (e) => {
+  const file = e.target.files[0];
+  setUpdatedImage(file);
+  setUpdatedImageName(file.name);
+}
+
+
+  const handleImageUpdate = async () => {
+    const imageUrl = await handleCloudinaryUpload(updatedImage);
   
+    if (imageUrl) {
+      try {
+        console.log(imageUrl)
+      //   if(isAdmin){
+      //     console.log("adminid",user?._id)
+      //     const response = await fetch(`/update-image-admin/${user?.user?._id}`, {
+      //     method: 'PATCH',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       picture: imageUrl,
+      //       picturePath: updatedImageName,
+      //     }),
+      //   });
+      //   }
+      //   else {
+      //     const response = await fetch(`/update-image/${user?.user?._id}`, {
+      //     method: 'PATCH',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       picture: imageUrl,
+      //       picturePath: updatedImageName,
+      //     }),
+      //   });
+  
+      //   }
+        
+      //   const data = await response.json();
+      //   console.log(data)
+      //   if (data.message === 'Profile image updated successfully') {
+      //     // Update the user state with the new profile picture URL
+      //     setUser((prevUser) => ({
+      //       ...prevUser,
+      //       user: {
+      //         ...prevUser.user,
+      //         picture: imageUrl,
+      //         picturePath: updatedImageName,
+      //       },
+      //     }));
+      //     closeProfileModal();
+      //   } else {
+      //     console.error('Error updating image from userhome:', data.error);
+      //   }
+      // } catch (error) {
+      //   console.error('Error updating image:', error);
+      // }
+      if (isAdmin) {
+        console.log("adminid", user?.user?._id);
+        const response = await fetch(`/update-image-admin/${user?.user?._id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            picture: imageUrl,
+            picturePath: updatedImageName,
+          }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.message === 'Profile image updated successfully') {
+          // Update the user state with the new profile picture URL
+          setUser((prevUser) => ({
+            ...prevUser,
+            user: {
+              ...prevUser.user,
+              picture: imageUrl,
+              picturePath: updatedImageName,
+            },
+          }));
+          closeProfileModal();
+        } else {
+          console.error('Error updating image from userhome:', data.error);
+        }
+      } else {
+        const response = await fetch(`/update-image/${user?.user?._id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            picture: imageUrl,
+            picturePath: updatedImageName,
+          }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.message === 'Profile image updated successfully') {
+          // Update the user state with the new profile picture URL
+          setUser((prevUser) => ({
+            ...prevUser,
+            user: {
+              ...prevUser.user,
+              picture: imageUrl,
+              picturePath: updatedImageName,
+            },
+          }));
+          closeProfileModal();
+        } else {
+          console.error('Error updating image from userhome:', data.error);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating image:', error);
+    }
+    }
+  };
+
   const renderAdminProfileModalContent = () => (
     <>
       <h1 className='text-2xl font-bold m-3 ml-5'> Admin Info</h1>
       <p className='mt-1'>Name: {user?.user?.name}</p>
       <p className='mt-1'>RollNo: {user?.user?.rollnumber}</p>
+      <p className='mt-1'>Club Name: {user?.user?.club}</p>
+      <p className='mt-1'>
+        Profile Image: {isEditing ? 
+        <input type='file' onChange={handleUpdateImage} /> :
+        <Image publicId={user?.user?.picture} cloudName='campusconnect-rajdeep'>
+          <Transformation width='15' height='15' crop='fill' />
+        </Image>
+        }
+        {isEditing && 
+          <button onClick={handleImageUpdate} style={{ backgroundColor: 'green', color: 'white', padding: '0px 8px', cursor: 'pointer', borderRadius: '4px' }}>Update</button>
+       }
+      </p>
+
+      {!isEditing && (
+        <button className='text-blue-500' onClick={handleEditClick}>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-6 w-6'
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='2'
+              d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
+            />
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='2'
+              d='M16 15v1a2 2 0 01-2 2H6m4-2H6'
+            />
+          </svg>
+        </button>
+      )}
+
     </>
   );
 
@@ -112,6 +302,18 @@ const Userhome = () => {
         {isEditing && <button onClick={handleUpdateYear} style={{ backgroundColor: 'green', color: 'white', padding: '0px 8px', marginTop: '2px', marginLeft: '5px', cursor: 'pointer', borderRadius: '4px' }}>Update</button>}
       </p>
       <p className='mt-1'>Department: {user?.user?.department}</p>
+
+      <p className='mt-1'>
+        Profile Image: {isEditing ? 
+        <input type='file' onChange={handleUpdateImage} /> :
+        <Image publicId={user?.user?.picture} cloudName='campusconnect-rajdeep'>
+          <Transformation width='15' height='15' crop='fill' />
+        </Image>
+        }
+        {isEditing && 
+          <button onClick={handleImageUpdate} style={{ backgroundColor: 'green', color: 'white', padding: '0px 8px', cursor: 'pointer', borderRadius: '4px' }}>Update</button>
+       }
+      </p>
 
       {!isEditing && (
         <button className='text-blue-500' onClick={handleEditClick}>
@@ -232,7 +434,9 @@ const Userhome = () => {
           </button>
           <img
             className="h-12 w-10 ml-8 mr-5 m-1 rounded-full object-cover"
-            src={user.user.picture}
+            src=
+            {user?.user?.picture}
+            // {`${user.user.picture}?${Date.now(5)}`}
             onClick={() => openProfileModal()}
             alt="user image"
           />

@@ -84,8 +84,8 @@ const MyPostWidget = ({ picturePath }) => {
 
   return (
     <WidgetWrapper>
-      <FlexBetween gap="1.5rem">
-        <UserImage image={picturePath}/>
+      <FlexBetween gap="1rem">
+        <UserImage image={picturePath} size="65px"/>
         <InputBase
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}
@@ -94,7 +94,7 @@ const MyPostWidget = ({ picturePath }) => {
             width: "100%",
             backgroundColor: palette.neutral.light,
             borderRadius: "2rem",
-            padding: "1rem 2rem",
+            padding: "1rem 1.7rem",
           }}
         />
       </FlexBetween>
