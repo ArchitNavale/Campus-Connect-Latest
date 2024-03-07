@@ -43,7 +43,7 @@ const Navbar = () => {
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
-  const userid = `${user._id}`
+  const userid = user && user._id ? `${user._id}` : ''; 
   console.log("userid from nav",userid)
   const fullName = user ? `${user.name}` : '';
   useEffect(() => {

@@ -95,7 +95,7 @@ router.post("/signin", async (req, res) => {
 });
 
 router.post("/add-club", async (req, res) => {
-  const {club, name, rollnumber, password} = req.body;
+  const {club, name, rollnumber, password,email,picture,picturePath} = req.body;
   const newClub = await new Club({
     club,
   });
@@ -105,7 +105,10 @@ router.post("/add-club", async (req, res) => {
     name: name,
     rollnumber: rollnumber,
     club: club,
+    email:email,
     password: password,
+    picture:picture,
+    picturePath:picturePath
   })
   await newAdmin.save()
   return res.json({ message: "done" });

@@ -41,7 +41,7 @@ let isSuperAdmin = false;
                     // navigate('/user-home');
                     setTimeout(() => {
                         navigate('/user-home');
-                    }, 2100);
+                    }, 2300);
                     
                 }
                 if(data?.message) {
